@@ -19,6 +19,12 @@ function getEventTarget(nativeEvent) {
   // https://github.com/facebook/react/issues/12506
   let target = nativeEvent.target || nativeEvent.srcElement || window;
 
+  // If encapsulated in a Web Component use the Event composedPath()
+  // https://developer.mozilla.org/en-US/docs/Web/API/Event/composedPath
+  if(nativeEvent.composedPath && typeof nativeEvent.composedPath == 'function') {
+    return nativeEvent.composedPath()[0];
+  }
+
   // Normalize SVG <use> element events #4963
   if (target.correspondingUseElement) {
     target = target.correspondingUseElement;
